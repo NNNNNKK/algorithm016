@@ -110,4 +110,91 @@ public:
 };
 //时间复杂度分析：单循环的复杂度为O(n),vector的插入操作的时间复杂度为O(n)，所以总的时间复杂度为O(n)。空间复杂度为O(1)。
 
+/*********************************设计循环双端队列********************************************************/
+
+class MyCircularDeque {
+public:
+    vector<int> buffer;
+    int front;//队列首索引
+    int rear;//循环队列尾地址
+    int cnt;//rong
+    /** Initialize your data structure here. Set the size of the deque to be k. */
+    MyCircularDeque(int k) {
+        cnt=k+1;//多留一个位置，因为rear指向尾部得下一个指针
+        buffer.assign(cnt,0);
+        front=0;
+        rear=0;
+    }
+    /** Adds an item at the front of Deque. Return true if the operation is successful. */
+    bool insertFront(int value) {
+        if(isFull()) return false;
+        front=(front-1+cnt)%cnt;
+        buffer[front]=value;
+        return true;
+    }
+    
+    /** Adds an item at the rear of Deque. Return true if the operation is successful. */
+    bool insertLast(int value) {
+        if(isFull()) return false;
+        rear=(rear+1)%cnt;
+        buffer[rear]=value; 
+        return true;
+    }
+    
+    /** Deletes an item from the front of Deque. Return true if the operation is successful. */
+    bool deleteFront() {
+        if(isEmpty()) return false;
+        front=(front+1)%cnt;
+        return true;
+    }
+    
+    /** Deletes an item from the rear of Deque. Return true if the operation is successful. */
+    bool deleteLast() {
+        if(isEmpty()) return false;
+        rear=(rear-1+cnt)%cnt;
+        return true;
+    }
+    
+    /** Get the front item from the deque. */
+    int getFront() {
+        if(isEmpty()) return -1;
+        return buffer[front];
+    }
+    
+    /** Get the last item from the deque. */
+    int getRear() {
+        if(isEmpty()) return -1;
+        return buffer[(rear-1+cnt)%cnt];
+    }
+    
+    /** Checks whether the circular deque is empty or not. */
+    bool isEmpty() {
+        if(front==rear)
+            return true;
+        else 
+            return false;
+    }
+    
+    /** Checks whether the circular deque is full or not. */
+    bool isFull() {
+        if((rear+1)%cnt==front)
+            return true;
+        else
+            return false;
+    }
+};
+
+/**
+ * Your MyCircularDeque object will be instantiated and called as such:
+ * MyCircularDeque* obj = new MyCircularDeque(k);
+ * bool param_1 = obj->insertFront(value);
+ * bool param_2 = obj->insertLast(value);
+ * bool param_3 = obj->deleteFront();
+ * bool param_4 = obj->deleteLast();
+ * int param_5 = obj->getFront();
+ * int param_6 = obj->getRear();
+ * bool param_7 = obj->isEmpty();
+ * bool param_8 = obj->isFull();
+ */
+
 #endif//MYHOMEWORK_01
